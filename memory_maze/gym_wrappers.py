@@ -2,9 +2,14 @@ from typing import Any, Tuple
 import numpy as np
 
 import dm_env
-import gym
 from dm_env import specs
-from gym import spaces
+
+try:
+    import gymnasium as gym
+    from gymnasium import spaces
+except:
+    import gym
+    from gym import spaces
 
 
 class GymWrapper(gym.Env):

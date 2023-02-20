@@ -3,11 +3,15 @@ import os
 import argparse
 from collections import defaultdict
 
-import gym
+try:
+    import gymnasium as gym
+    from gymnasium import spaces
+except:
+    import gym
+    from gym import spaces
 import numpy as np
 import pygame
 import pygame.freetype
-from gym import spaces
 from PIL import Image
 
 from recording import SaveNpzWrapper

@@ -1,7 +1,10 @@
 from datetime import datetime
 from pathlib import Path
 
-import gym
+try:
+    import gymnasium as gym
+except:
+    import gym
 import imageio
 import numpy as np
 
