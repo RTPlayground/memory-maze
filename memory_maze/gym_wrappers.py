@@ -1,5 +1,12 @@
+from typing import (
+    Any,
+    Tuple,
+    TypeVar,
+)
+
 from typing import Any, Tuple
 import numpy as np
+ObsType = TypeVar("ObsType")
 
 import dm_env
 from dm_env import specs
@@ -18,21 +25,35 @@ class GymWrapper(gym.Env):
         self.env = env
         self.action_space = _convert_to_space(env.action_spec())
         self.observation_space = _convert_to_space(env.observation_spec())
+        self.img = None
 
-    def reset(self) -> Any:
+    def reset(self, *, seed: int | None = None, 
+        options: dict[str, Any] | None = None) -> tuple[ObsType, dict[str, Any]]:
         ts = self.env.reset()
-        return ts.observation
+        # workaround for applications that use render
+        self.img = ts.observation
+        return ts.observation, dict()
 
-    def step(self, action) -> Tuple[Any, float, bool, dict]:
+    def step(self, action) -> Tuple[Any, float, bool, bool, dict]:
         ts = self.env.step(action)
         assert not ts.first(), "dm_env.step() caused reset, reward will be undefined."
         assert ts.reward is not None
         done = ts.last()
         terminal = ts.last() and ts.discount == 0.0
         info = {}
+        truncation = False
         if done and not terminal:
-            info['TimeLimit.truncated'] = True  # acme.GymWrapper understands this and converts back to dm_env.truncation()
-        return ts.observation, ts.reward, done, info
+            truncation = True
+            info['TimeLimit.truncated'] = truncation  # acme.GymWrapper understands this and converts back to dm_env.truncation()
+        # workaround for applications that use render
+        self.img = ts.observation
+        return ts.observation, ts.reward, done, truncation, info
+
+    def render(self) -> Any | None:
+        ''' workaround for applications that use render
+            It returns an image collected during step or reset 
+        '''
+        return self.img
 
 
 def _convert_to_space(spec: Any) -> gym.Space:

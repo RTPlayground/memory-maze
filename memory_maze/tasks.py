@@ -64,6 +64,7 @@ def _memory_maze(
     show_path=False,
     camera_resolution=64,
     seed=None,
+    render_mode=None,
 ):
     random_state = np.random.RandomState(seed)
     walker = RollingBallWithFriction(camera_height=0.3, add_ears=top_camera)

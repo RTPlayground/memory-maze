@@ -14,6 +14,8 @@ import pygame
 import pygame.freetype
 from PIL import Image
 
+import cv2
+
 from recording import SaveNpzWrapper
 
 if 'MUJOCO_GL' not in os.environ:
@@ -76,7 +78,7 @@ def main():
     steps = 0
     return_ = 0.0
     episode = 0
-    obs = env.reset()
+    obs, info = env.reset()
 
     pygame.init()
     start_fullscreen = args.fullscreen or FOCUS_HACK
@@ -175,7 +177,7 @@ def main():
             if np.random.random() < args.random:
                 action = env.action_space.sample()
 
-        obs, reward, done, info = env.step(action)  # type: ignore
+        obs, reward, done, truncation, info = env.step(action)  # type: ignore
         # print({k: v for k, v in obs.items() if k != 'image'})
         steps += 1
         return_ += reward
@@ -184,7 +186,7 @@ def main():
 
         if reward:
             print(f'reward: {reward}')
-        if done or force_reset:
+        if done or truncation or force_reset:
             print(f'Episode done - length: {steps}  return: {return_}')
             obs = env.reset()
             steps = 0
@@ -193,6 +195,8 @@ def main():
             if done and args.record:
                 # If recording, require relaunch for next episode
                 running = False
+
+        img = env.render()
 
     pygame.quit()
 
