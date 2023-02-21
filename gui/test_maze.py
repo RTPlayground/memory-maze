@@ -1,3 +1,7 @@
+""" Test maze is a minimal working example that shows the environment rendering 
+    on the screen.
+"""
+
 # https://stackoverflow.com/questions/71010343/cannot-load-swrast-and-iris-drivers-in-fedora-35/71421355#71421355
 
 #!pip install gym

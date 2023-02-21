@@ -1,5 +1,5 @@
 gymnasium
-pygame
+#pygame
 pillow
 imageio
 imageio-ffmpeg

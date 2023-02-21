@@ -1,3 +1,25 @@
+# Memory Maze
+
+Modified Memory Maze code to support gymnasium.  
+
+## Installation
+
+For more information, please read the installation below.  
+```sh
+pip install memory-maze
+```
+
+## Test Environment
+
+```sh
+# GUI dependencies
+pip install gym pillow imageio
+
+# Launch with standard 64x64 resolution
+python gui/test_maze.py
+```
+
+
 **Status:** Stable release
 
 [![PyPI](https://img.shields.io/pypi/v/memory-maze.svg)](https://pypi.python.org/pypi/memory-maze/#history)
